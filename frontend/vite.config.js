@@ -46,7 +46,7 @@ export default defineConfig(({ command }) => {
   };
 
   if (command !== 'serve') {
-    config.base = '/todo-board/';
+    config.base = '/todo-board-uue7.onrender.com/';
   }
 
   return config;
