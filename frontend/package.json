@@ -7,8 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "preinstall": "npm install --legacy-peer-deps"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@emotion/react": "^11.11.3",
@@ -16,7 +15,6 @@
     "@mui/icons-material": "^5.15.6",
     "@mui/lab": "^5.0.0-alpha.163",
     "@mui/material": "^5.15.6",
-    "@mui/styles": "^5.15.7",
     "@reduxjs/toolkit": "^2.0.1",
     "formik": "^2.4.5",
     "jwt-decode": "^4.0.0",
