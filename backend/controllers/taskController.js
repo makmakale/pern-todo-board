@@ -18,7 +18,7 @@ const getTaskList = asyncHandler(async (req, res) => {
       order: ['order'],
     });
 
-    res.json(tasks);
+    res.send(tasks);
   } catch (err) {
     res.status(400);
     throw new Error(err.message);
@@ -41,7 +41,7 @@ const getTask = asyncHandler(async (req, res) => {
       ],
     });
 
-    res.json(task);
+    res.send(task);
   } catch (err) {
     res.status(400);
     throw new Error(err.message);
@@ -68,7 +68,7 @@ const createTask = asyncHandler(async (req, res) => {
       }
     }
 
-    res.json(task);
+    res.send(task);
   } catch (err) {
     res.status(400);
     throw new Error(err.message);
@@ -114,7 +114,7 @@ const updateTask = asyncHandler(async (req, res) => {
       }
     }
 
-    res.json(task);
+    res.send(task);
   } catch (err) {
     res.status(400);
     throw new Error(err.message);
