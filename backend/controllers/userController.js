@@ -137,11 +137,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
   let fileName = user.image || '';
   const __dirname = path.resolve();
-  const imagesDir = path.join(
-    __dirname,
-    process.env.NODE_ENV === 'production' ? '/assets/images' : '/frontend/dist/assets/images',
-  );
-
+  const imagesDir = path.join(__dirname, '/frontend/dist/assets/images');
   if (image) {
     if (!fs.existsSync(imagesDir)) {
       fs.mkdirSync(imagesDir, { recursive: true });
