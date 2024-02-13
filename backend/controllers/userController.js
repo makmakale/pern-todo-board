@@ -25,7 +25,7 @@ const authUser = asyncHandler(async (req, res) => {
   if (user && (await user.matchPassword(password))) {
     generateToken(res, user.id);
 
-    res.send({
+    res.json({
       id: user.id,
       username: user.username,
       firstName: user.firstName,
@@ -106,7 +106,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
     throw new Error('User not found');
   }
 
-  res.send(user);
+  res.json(user);
 });
 
 // @desc    Update user profile
@@ -159,7 +159,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   });
   const updatedUser = await user.save();
 
-  res.send(updatedUser);
+  res.json(updatedUser);
 });
 
 export {
