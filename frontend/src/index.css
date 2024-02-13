@@ -1,0 +1,28 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#root {
+  min-height: 100vh;
+  background: #EEAECA;
+  background: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
+  font-family: Roboto, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+input {
+  padding: .8rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  display: flex;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.ql-editor {
+  min-height: 300px;
+}
