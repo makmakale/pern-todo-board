@@ -57,4 +57,4 @@ export const TASK_TYPE_OPTIONS = [
   },
 ];
 
-export const IMAGE_PATH = '/dist/assets/images';
+export const IMAGE_PATH = '/assets/images';
