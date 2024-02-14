@@ -1,5 +1,4 @@
 import asyncHandler from 'express-async-handler';
-import fs from 'fs';
 import path from 'path';
 import { Op } from 'sequelize';
 import { User } from '../models/index.js';
@@ -136,16 +135,17 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   const image = req.files?.image || '';
 
   let fileName = user.image || '';
-  const __dirname = path.resolve();
-  const imagesDir = path.join(__dirname, '/frontend/dist/assets/images');
   if (image) {
-    if (!fs.existsSync(imagesDir)) {
-      fs.mkdirSync(imagesDir, { recursive: true });
-    }
-
+    const __dirname = path.resolve();
+    const imagesDir = path.join(__dirname, '/frontend/public');
     const fileExt = path.extname(image.name);
-    fileName = `${req.user.id}_${username}${fileExt}`;
-    await image.mv(path.resolve(imagesDir, fileName));
+    fileName = `/images/${req.user.id}_${username}${fileExt}`;
+    try {
+      await image.mv(path.join(imagesDir, fileName));
+      console.log('Avatar was successfully uploaded to', imagesDir);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
   }
 
   if (req.body.password) {

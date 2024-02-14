@@ -56,5 +56,3 @@ export const TASK_TYPE_OPTIONS = [
     label: 'Bug',
   },
 ];
-
-export const IMAGE_PATH = '/assets/images';

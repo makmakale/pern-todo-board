@@ -1,4 +1,3 @@
-import { IMAGE_PATH } from '@/utils/constants';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Avatar from '@mui/material/Avatar';
@@ -31,7 +30,7 @@ function ProfileImage({
     <Stack alignItems="center">
       <Avatar
         alt={imageAlt}
-        src={showAvatar ? `${IMAGE_PATH}/${imageSrc}` : ''}
+        src={showAvatar ? imageSrc : ''}
         sx={{ width: 150, height: 150, my: 2 }}
       />
 
