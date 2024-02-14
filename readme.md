@@ -1,6 +1,6 @@
 # ToDo Board (PERN App)
 
-<img src="./frontend/public/screen.png" />
+<img src="./frontend/public/screen.jpg" />
 
 It includes the following:
 
@@ -49,8 +49,6 @@ npm install
 # Run frontend (:3000) & backend (:5000)
 npm run dev
 
-# Run backend only
-npm run server
 ```
 
 ## Build & Deploy
