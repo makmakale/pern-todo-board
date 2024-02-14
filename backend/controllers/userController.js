@@ -22,19 +22,16 @@ const authUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ where: { username } });
 
   if (user && (await user.matchPassword(password))) {
-    const token = generateToken(res, user.id);
+    generateToken(res, user.id);
 
     res.json({
-      userInfo: {
-        id: user.id,
-        username: user.username,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        image: user.image,
-        createdAt: user.createdAt,
-      },
-      token,
+      id: user.id,
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      image: user.image,
+      createdAt: user.createdAt,
     });
   } else {
     res.status(401);
@@ -70,19 +67,16 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (user) {
-    const token = generateToken(res, user.id);
+    generateToken(res, user.id);
 
     res.status(201).json({
-      userInfo: {
-        id: user.id,
-        username: user.username,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        image: user.image,
-        createdAt: user.createdAt,
-      },
-      token,
+      id: user.id,
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      image: user.image,
+      createdAt: user.createdAt,
     });
   } else {
     res.status(400);
@@ -147,7 +141,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   let fileName = user.image || '';
   if (image) {
     const __dirname = path.resolve();
-    const imagesDir = path.join(__dirname, '/frontend/dist');
+    const imagesDir = path.join(__dirname, '/assets');
     const fileExt = path.extname(image.name);
     fileName = `/images/${req.user.id}_${username}_${Date.now()}${fileExt}`;
     try {

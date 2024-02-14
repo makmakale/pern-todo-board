@@ -4,7 +4,7 @@ import InputField from '@/components/common/Form/InputField';
 import { profileValidationSchema } from '@/components/Profile/Profile.formik';
 import ProfileImage from '@/components/Profile/ProfileImage';
 import { useUpdateUserMutation } from '@/utils/rtk/auth/authApiSlice';
-import { selectCurrentUser, updateCredentials } from '@/utils/rtk/auth/authSlice';
+import { selectCurrentUser, setCredentials } from '@/utils/rtk/auth/authSlice';
 import Grid from '@mui/material/Grid';
 import { Field, Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
@@ -39,7 +39,7 @@ function Profile() {
     }
 
     const updatedUser = await updateUser(formData).unwrap();
-    dispatch(updateCredentials(updatedUser));
+    dispatch(setCredentials(updatedUser));
     navigate('/');
   };
 
