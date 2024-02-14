@@ -11,7 +11,6 @@ It includes the following:
 - Custom error middleware
 - React frontend to register, login, logout, view profile, update profile, add/edit tasks, D&D
 - React Material UI library
-- React Toastify notifications
 
 ## Usage
 
