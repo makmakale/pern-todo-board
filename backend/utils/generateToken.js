@@ -11,6 +11,8 @@ const generateToken = (res, userId) => {
     sameSite: 'strict', // Prevent CSRF attacks
     maxAge: 4 * 60 * 60 * 1000, // 4 hours
   });
+
+  return token;
 };
 
 export default generateToken;
