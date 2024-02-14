@@ -4,8 +4,8 @@ import { defineConfig } from 'vite';
 import { createStyleImportPlugin } from 'vite-plugin-style-import';
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command }) => ({
-  base: command === 'serve' ? '/' : 'https://todo-board-uue7.onrender.com',
+export default defineConfig(() => ({
+  base: '/',
   optimizeDeps: {
     include: ['react-quill'],
   },
