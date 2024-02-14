@@ -137,9 +137,9 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   let fileName = user.image || '';
   if (image) {
     const __dirname = path.resolve();
-    const imagesDir = path.join(__dirname, '/frontend/public');
+    const imagesDir = path.join(__dirname, '/frontend/dist');
     const fileExt = path.extname(image.name);
-    fileName = `/images/${req.user.id}_${username}${fileExt}`;
+    fileName = `/images/${req.user.id}_${username}_${Date.now()}${fileExt}`;
     try {
       await image.mv(path.join(imagesDir, fileName));
       console.log('Avatar was successfully uploaded to', imagesDir);
