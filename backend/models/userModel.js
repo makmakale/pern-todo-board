@@ -4,7 +4,10 @@ import sequelize from '../config/db.js';
 
 const User = sequelize.define('user', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  username: DataTypes.STRING,
+  username: {
+    type: DataTypes.STRING,
+    unique: true,
+  },
   password: { type: DataTypes.STRING },
   firstName: DataTypes.STRING,
   lastName: DataTypes.STRING,

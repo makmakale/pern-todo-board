@@ -3,8 +3,7 @@ import { setNotification } from '@/utils/rtk/notifications/notifySlice';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: '/api',
-  // credentials: 'include',
+  baseUrl: process.env.NODE_ENV === 'production' ? 'https://todo-board-uue7.onrender.com/api' : '/api',
   prepareHeaders: (headers, { getState }) => {
     const { token } = getState().auth;
     if (token) {
@@ -17,7 +16,7 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
 
-  if (result?.error?.status === 401) {
+  if (result?.error?.originalStatus === 401 || result?.error?.status === 401) {
     // send refresh token to get new access token
     const refreshResult = await baseQuery('/users/refresh', api, extraOptions);
 

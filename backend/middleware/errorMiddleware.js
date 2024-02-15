@@ -1,23 +1,11 @@
-const notFound = (req, res, next) => {
-  const error = new Error(`Not Found - ${req.originalUrl}`);
-  res.status(404);
-  next(error);
-};
+import ApiError from '../utils/ResponseHandler.js';
 
 const errorHandler = (err, req, res) => {
-  let statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-  let { message } = err;
-
-  // If Mongoose not found error, set to 404 and change message
-  if (err.name === 'CastError' && err.kind === 'ObjectId') {
-    statusCode = 404;
-    message = 'Resource not found';
+  console.log('errorHandler');
+  if (err instanceof ApiError) {
+    return res.status(err.status).json({ message: err.message });
   }
-
-  res.status(statusCode).json({
-    message,
-    stack: process.env.NODE_ENV === 'production' ? null : err.stack,
-  });
+  return res.status(500).json({ message: 'Internal Server Error' });
 };
 
-export { notFound, errorHandler };
+export default errorHandler;

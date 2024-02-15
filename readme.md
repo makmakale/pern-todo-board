@@ -1,17 +1,16 @@
 # ToDo Board (PERN App)
 
-<img src="./frontend/public/screen.png" />
+<img src="./frontend/public/screen.jpg" />
 
 It includes the following:
 
 - Backend API with Express & PostgreSQL
-- JWT authentication stored in HTTP-only cookie
+- JWT authentication
 - Protected routes and endpoints
 - Custom middleware to check JSON web token and store in cookie
 - Custom error middleware
 - React frontend to register, login, logout, view profile, update profile, add/edit tasks, D&D
 - React Material UI library
-- React Toastify notifications
 
 ## Usage
 
@@ -49,8 +48,6 @@ npm install
 # Run frontend (:3000) & backend (:5000)
 npm run dev
 
-# Run backend only
-npm run server
 ```
 
 ## Build & Deploy

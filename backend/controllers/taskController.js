@@ -1,11 +1,12 @@
 import asyncHandler from 'express-async-handler';
 import { Op } from 'sequelize';
 import { Task, User } from '../models/index.js';
+import ResponseHandler from '../utils/ResponseHandler.js';
 
 // @desc    Full list of tasks
 // @route   GET /api/tasks
 // @access  Public
-const getTaskList = asyncHandler(async (req, res) => {
+const getTaskList = asyncHandler(async (req, res, next) => {
   try {
     const tasks = await Task.findAll({
       include: [
@@ -18,17 +19,16 @@ const getTaskList = asyncHandler(async (req, res) => {
       order: ['order'],
     });
 
-    res.json(tasks);
+    return ResponseHandler.success(res, tasks);
   } catch (err) {
-    res.status(400);
-    throw new Error(err.message);
+    return next(ResponseHandler.internal(res, err.message));
   }
 });
 
 // @desc    Task details
 // @route   POST /api/tasks/:taskId
 // @access  Private
-const getTask = asyncHandler(async (req, res) => {
+const getTask = asyncHandler(async (req, res, next) => {
   try {
     const task = await Task.findOne({
       where: { id: req.params.taskId },
@@ -41,17 +41,16 @@ const getTask = asyncHandler(async (req, res) => {
       ],
     });
 
-    res.json(task);
+    return ResponseHandler.success(res, task);
   } catch (err) {
-    res.status(400);
-    throw new Error(err.message);
+    return next(ResponseHandler.internal(res, err.message));
   }
 });
 
 // @desc    Create new task
 // @route   POST /api/tasks
 // @access  Private
-const createTask = asyncHandler(async (req, res) => {
+const createTask = asyncHandler(async (req, res, next) => {
   try {
     const task = await Task.create({ ...req.body, userId: req.user?.id });
 
@@ -68,17 +67,16 @@ const createTask = asyncHandler(async (req, res) => {
       }
     }
 
-    res.json(task);
+    return ResponseHandler.success(res, task);
   } catch (err) {
-    res.status(400);
-    throw new Error(err.message);
+    return next(ResponseHandler.internal(res, err.message));
   }
 });
 
 // @desc    Update task
 // @route   PUT /api/tasks
 // @access  Private
-const updateTask = asyncHandler(async (req, res) => {
+const updateTask = asyncHandler(async (req, res, next) => {
   try {
     const { id, ...rest } = req.body;
 
@@ -114,10 +112,9 @@ const updateTask = asyncHandler(async (req, res) => {
       }
     }
 
-    res.json(task);
+    return ResponseHandler.success(res, task);
   } catch (err) {
-    res.status(400);
-    throw new Error(err.message);
+    return next(ResponseHandler.internal(res, err.message));
   }
 });
 
