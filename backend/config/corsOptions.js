@@ -1,6 +1,6 @@
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://todo-board-client.onrender.com',
+  'https://pern-todo-board.onrender.com/',
 ];
 
 export const corsOptions = {
