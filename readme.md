@@ -5,7 +5,7 @@
 It includes the following:
 
 - Backend API with Express & PostgreSQL
-- JWT authentication stored in HTTP-only cookie
+- JWT authentication
 - Protected routes and endpoints
 - Custom middleware to check JSON web token and store in cookie
 - Custom error middleware

@@ -1,6 +1,5 @@
 import { useToolBarUserHooks } from '@/components/Board/components/ToolBar/components/ToolBarUser/ToolBarUser.hooks';
 import UserAvatar from '@/components/common/User/UserAvatar';
-import { useLogoutMutation } from '@/utils/rtk/auth/authApiSlice';
 import { logOut } from '@/utils/rtk/auth/authSlice';
 import Box from '@mui/material/Box';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
@@ -18,12 +17,10 @@ function ToolBarUser({ user }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [logoutApiCall] = useLogoutMutation();
-  const logoutHandler = async () => {
+  const logoutHandler = () => {
     try {
-      await logoutApiCall().unwrap();
       dispatch(logOut());
-      navigate('/login');
+      navigate('/');
     } catch (err) {
       console.error(err);
     }

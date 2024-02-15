@@ -1,78 +1,72 @@
 import asyncHandler from 'express-async-handler';
 import path from 'path';
 import { Op } from 'sequelize';
+import { jwtDecode } from 'jwt-decode';
 import { User } from '../models/index.js';
 import generateToken from '../utils/generateToken.js';
+import ResponseHandler from '../utils/ResponseHandler.js';
 
 // @desc    Auth user & get token
 // @route   POST /api/users/auth
 // @access  Public
-const authUser = asyncHandler(async (req, res) => {
+const authUser = asyncHandler(async (req, res, next) => {
   const { username, password } = req.body;
 
-  if (!username) {
-    res.status(400);
-    throw new Error('Username is required');
-  }
-  if (!password) {
-    res.status(400);
-    throw new Error('Password is required');
+  if (!username || !password) {
+    return next(ResponseHandler.badRequest(res, 'Username and Password are required'));
   }
 
   const user = await User.findOne({ where: { username } });
-
-  if (user && (await user.matchPassword(password))) {
-    const token = generateToken(res, user.id);
-
-    res.json({
-      userInfo: {
-        id: user.id,
-        username: user.username,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        image: user.image,
-        createdAt: user.createdAt,
-      },
-      token,
-    });
-  } else {
-    res.status(401);
-    throw new Error('Invalid username or password');
+  if (!user) {
+    return next(ResponseHandler.badRequest(res, `User with "${username}" not found`));
   }
+
+  const passwordMatch = await user.matchPassword(password);
+  if (!passwordMatch) {
+    return next(ResponseHandler.badRequest(res, 'Incorrect password'));
+  }
+
+  const { token } = generateToken(res, user.id);
+
+  return ResponseHandler.success(res, {
+    userInfo: {
+      id: user.id,
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      image: user.image,
+      createdAt: user.createdAt,
+    },
+    token,
+    message: 'Logged in successfully',
+  });
 });
 
 // @desc    Register a new user
 // @route   POST /api/users
 // @access  Public
-const registerUser = asyncHandler(async (req, res) => {
+const registerUser = asyncHandler(async (req, res, next) => {
   const { username, password } = req.body;
 
-  if (!username) {
-    res.status(400);
-    throw new Error('Username is required');
-  }
-  if (!password) {
-    res.status(400);
-    throw new Error('Password is required');
+  if (!username || !password) {
+    return next(ResponseHandler.badRequest(res, 'Username and Password are required'));
   }
 
   const userExists = await User.findOne({ where: { username } });
-
   if (userExists) {
-    res.status(400);
-    throw new Error(`User with username "${username}" already exists`);
+    return next(ResponseHandler.badRequest(res, `User with username "${username}" already exists`));
   }
 
-  const user = await User.create({
-    username,
-    password,
-  });
+  try {
+    const user = await User.create({
+      username,
+      password,
+    });
 
-  if (user) {
-    const token = generateToken(res, user.id);
+    const { token } = generateToken(res, user.id);
 
-    res.status(201).json({
+    return ResponseHandler.success(res, {
       userInfo: {
         id: user.id,
         username: user.username,
@@ -83,53 +77,53 @@ const registerUser = asyncHandler(async (req, res) => {
         createdAt: user.createdAt,
       },
       token,
+      message: 'Registration successful',
     });
-  } else {
-    res.status(400);
-    throw new Error('Invalid user data');
+  } catch (err) {
+    return next(ResponseHandler.internal(res, err.message));
   }
 });
 
-// @desc    Logout user / clear cookie
-// @route   POST /api/users/logout
-// @access  Public
-const logoutUser = (req, res) => {
-  res.cookie('jwt', '', {
-    httpOnly: true,
-    expires: new Date(0),
-  });
-  res.status(200).json({ message: 'Logged out successfully' });
-};
+// @desc    Refresh Token
+// @route   POST /api/users/refresh
+// @access  Private
+const refreshToken = asyncHandler(async (req, res) => {
+  const authHeader = req.headers.authorization || req.headers.Authorization;
+  if (!authHeader?.startsWith('Bearer ')) return res.sendStatus(401);
+  const accessToken = authHeader.split(' ')[1];
+  const decoded = jwtDecode(accessToken);
+  const { refreshToken: token } = generateToken(res, decoded.userId);
+
+  return ResponseHandler.success(res, { token });
+});
 
 // @desc    Get user profile
 // @route   GET /api/users/profile
 // @access  Private
-const getUserProfile = asyncHandler(async (req, res) => {
+const getUserProfile = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({
     where: { id: req.user.id },
     attributes: { exclude: ['password', 'updatedAt'] },
   });
 
   if (!user) {
-    res.status(404);
-    throw new Error('User not found');
+    return next(ResponseHandler.badRequest(res, 'User not found'));
   }
 
-  res.json(user);
+  return ResponseHandler.success(res, user);
 });
 
 // @desc    Update user profile
 // @route   PUT /api/users/profile
 // @access  Private
-const updateUserProfile = asyncHandler(async (req, res) => {
+const updateUserProfile = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({
     where: { id: req.user.id },
     attributes: { exclude: ['password', 'updatedAt'] },
   });
 
   if (!user) {
-    res.status(404);
-    throw new Error('User not found');
+    return next(ResponseHandler.badRequest(res, 'User not found'));
   }
 
   const { username } = req.body;
@@ -138,8 +132,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   });
 
   if (userByUsername) {
-    res.status(400);
-    throw new Error('User with same "username" already exist');
+    return next(ResponseHandler.badRequest(res, 'User with same "username" already exist'));
   }
 
   const image = req.files?.image || '';
@@ -147,14 +140,14 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   let fileName = user.image || '';
   if (image) {
     const __dirname = path.resolve();
-    const imagesDir = path.join(__dirname, '/frontend/dist');
+    const imagesDir = path.join(__dirname, 'assets');
     const fileExt = path.extname(image.name);
     fileName = `/images/${req.user.id}_${username}_${Date.now()}${fileExt}`;
     try {
       await image.mv(path.join(imagesDir, fileName));
       console.log('Avatar was successfully uploaded to', imagesDir);
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      return next(ResponseHandler.internal(res, err.message));
     }
   }
 
@@ -168,13 +161,13 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   });
   const updatedUser = await user.save();
 
-  res.json(updatedUser);
+  return ResponseHandler.success(res, updatedUser);
 });
 
 export {
   authUser,
   registerUser,
-  logoutUser,
+  refreshToken,
   getUserProfile,
   updateUserProfile,
 };
