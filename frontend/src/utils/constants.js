@@ -56,3 +56,5 @@ export const TASK_TYPE_OPTIONS = [
     label: 'Bug',
   },
 ];
+
+export const IMAGE_PATH = process.env.NODE_ENV === 'production' ? 'https://todo-board-uue7.onrender.com/images' : '/images';
