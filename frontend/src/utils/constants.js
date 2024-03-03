@@ -57,4 +57,4 @@ export const TASK_TYPE_OPTIONS = [
   },
 ];
 
-export const IMAGE_PATH = process.env.NODE_ENV === 'production' ? 'https://pern-todo-board-api.vercel.app/images' : '/images';
+export const IMAGE_PATH = process.env.NODE_ENV === 'production' ? `${process.env.BACKEND_URL}/images` : '/images';
