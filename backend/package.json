@@ -5,6 +5,7 @@
   "description": "ToDo Board",
   "main": "server.js",
   "scripts": {
+    "build": "npm run start",
     "start": "node server.js",
     "server": "nodemon server.js"
   },
