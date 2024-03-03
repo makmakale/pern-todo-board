@@ -57,4 +57,4 @@ export const TASK_TYPE_OPTIONS = [
   },
 ];
 
-export const IMAGE_PATH = process.env.NODE_ENV === 'production' ? `${process.env.BACKEND_URL}/images` : '/images';
+export const IMAGE_PATH = process.env.NODE_ENV === 'production' ? `${import.meta.env.VITE_BACKEND_URL}/images` : '/images';
