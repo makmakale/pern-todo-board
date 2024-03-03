@@ -3,7 +3,7 @@ import { setNotification } from '@/utils/rtk/notifications/notifySlice';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: process.env.NODE_ENV === 'production' ? 'https://todo-board-uue7.onrender.com/api' : '/api',
+  baseUrl: process.env.NODE_ENV === 'production' ? 'https://pern-todo-board-api.vercel.app/api' : '/api',
   prepareHeaders: (headers, { getState }) => {
     const { token } = getState().auth;
     if (token) {

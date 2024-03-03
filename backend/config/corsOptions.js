@@ -1,6 +1,7 @@
 const allowedOrigins = [
   'http://localhost:3000',
   'https://pern-todo-board.onrender.com',
+  'https://pern-todo-board.vercel.app',
 ];
 
 export const corsOptions = {
